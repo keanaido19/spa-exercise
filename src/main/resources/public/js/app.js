@@ -21,25 +21,52 @@ function lookupWord() {
             phonetics: data[0].phonetics,
             meanings: data[0].meanings
           };
-          const template = document.getElementById('results-template').innerText;
+          const template = document.getElementById('dictionary-results-template').innerText;
           const compiledFunction = Handlebars.compile(template);
           document.getElementById('results').innerHTML = compiledFunction(data);
         });
-  });;
+  });
 }
 
-// tag::router[]
+function lookupSynonyms() {
+  const form = document.getElementById("form");
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const data = new FormData(event.target);
+    const word = data.get("word");
+
+    const options = {
+      method: 'GET',
+    };
+
+    document.getElementById('results').innerHTML = `<p>Searching for synonyms of <em>${word}</em>...</p>`;
+
+    fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`, options)
+        .then(response => response.json())
+        .then(data => {
+          data = {
+            word: data[0].word,
+            meanings: data[0].meanings
+          };
+          const template = document.getElementById('synonyms-results-template').innerText;
+          const compiledFunction = Handlebars.compile(template);
+          document.getElementById('results').innerHTML = compiledFunction(data);
+        });
+  });
+}
+
 window.addEventListener('load', () => {
   const app = $('#app');
 
-  const defaultTemplate = Handlebars.compile($('#default-template').html());
   const dictionaryTemplate = Handlebars.compile($('#dictionary-template').html());
+  const synonymsTemplate = Handlebars.compile($('#synonyms-template').html());
 
   const router = new Router({
     mode:'hash',
     root:'index.html',
     page404: (path) => {
-      const html = defaultTemplate();
+      const html = 'Click on a menu item.';
       app.html(html);
     }
   });
@@ -48,6 +75,12 @@ window.addEventListener('load', () => {
     html = dictionaryTemplate();
     app.html(html);
     lookupWord();
+  });
+
+  router.add('/synonyms', async () => {
+    html = synonymsTemplate();
+    app.html(html);
+    lookupSynonyms();
   });
 
   router.addUriListener();
@@ -62,7 +95,3 @@ window.addEventListener('load', () => {
 
   router.navigateTo('/');
 });
-Handlebars.registerHelper('loud', function (aString) {
-  return aString.toUpperCase()
-})
-// end::router[]

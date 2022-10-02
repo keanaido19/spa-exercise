@@ -13,11 +13,7 @@
 </nav>
 
 <br />
-<div id="app"></div>
-
-<script id="default-template" type="text/handlebars-template">
-    <p>Click on menu item.</p>
-</script>
+<div id="app">Click on a menu item.</div>
 
 <script id="dictionary-template" type="text/handlebars-template">
     <h1>Dictionary</h1>
@@ -30,7 +26,18 @@
     <div id="results"></div>
 </script>
 
-<script id="results-template" type="text/handlebars-template">
+<script id="synonyms-template" type="text/handlebars-template">
+    <h1>Synonyms</h1>
+    <br/>
+    <form id="form">
+        <input id="lookup" name="word" type="text" required/>
+        <input name="submit" type="submit" value="Lookup"/>
+    </form>
+    <br/>
+    <div id="results"></div>
+</script>
+
+<script id="dictionary-results-template" type="text/handlebars-template">
     <h2 id="word">{{word}}</h2>
     {{#if phonetics}}
     <h3>Phonetic</h3>
@@ -66,9 +73,20 @@
     </ul>
 </script>
 
+<script id="synonyms-results-template" type="text/handlebars-template">
+    <h2 id="word">{{word}}</h2>
+    <h3>Synonyms</h3>
+    <ol>
+        {{#each meanings}}
+        {{#each this.synonyms}}
+        <li><p class="related-word">{{this}}</p>
+            {{/each}}
+            {{/each}}
+    </ol>
+</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
 
-<!-- the vanilla-router library-->
 <script src="https://cdn.jsdelivr.net/npm/vanilla-router@1.2.8/index.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
