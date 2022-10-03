@@ -37,6 +37,17 @@
     <div id="results"></div>
 </script>
 
+<script id="antonyms-template" type="text/handlebars-template">
+    <h1>Antonyms</h1>
+    <br/>
+    <form id="form">
+        <input id="lookup" name="word" type="text" required/>
+        <input name="submit" type="submit" value="Lookup"/>
+    </form>
+    <br/>
+    <div id="results"></div>
+</script>
+
 <script id="dictionary-results-template" type="text/handlebars-template">
     <h2 id="word">{{word}}</h2>
     {{#if phonetics}}
@@ -77,10 +88,18 @@
     <h2 id="word">{{word}}</h2>
     <h3>Synonyms</h3>
     <ol>
-        {{#each meanings}}
-        {{#each this.synonyms}}
+        {{#each synonyms}}
         <li><p class="related-word">{{this}}</p>
             {{/each}}
+    </ol>
+</script>
+
+<script id="antonyms-results-template" type="text/handlebars-template">
+    <h2 id="word">{{word}}</h2>
+    <h3>Synonyms</h3>
+    <ol>
+        {{#each antonyms}}
+        <li><p class="related-word">{{this}}</p>
             {{/each}}
     </ol>
 </script>
